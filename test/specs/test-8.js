@@ -1,5 +1,4 @@
 import assert from 'assert'
-import { expect } from '@wdio/globals'
 
 describe('Valid Checkout', () => {    
     it('Checkout', async () => {
