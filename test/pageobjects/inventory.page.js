@@ -38,6 +38,10 @@ class InventoryPage {
         await addBtn.click()
     }
 
+    async getFirsInventoryItemName(){
+        const item = await $('.inventory_item_label .inventory_item_name')
+        return item.getText()
+    }
     
     async openMenu() {
         await this.burgerBtn.click()
@@ -73,11 +77,6 @@ class InventoryPage {
             expect(text).toBe(`${count}`);
         }
         await expect(this.badge).toHaveText(`${count}`)
-    }
-
-    async getFirstCartItemName() {
-        const item = await $('.cart_item_label .inventory_item_name')
-        return item.getText()
     }
 
     async sortProducts(value) {

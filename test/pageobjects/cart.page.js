@@ -8,6 +8,7 @@ class CartPage {
         const item = await $('.cart_item_label .inventory_item_name')
         return item.getText()
     }
+    
     async open() {
         await $('a.shopping_cart_link').click()
         await browser.waitUntil(async () => (await browser.getUrl()).includes('/cart.html'), {

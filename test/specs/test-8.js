@@ -11,7 +11,7 @@ describe('Valid Checkout', () => {
         await loginPage.open()
         await loginPage.login('standard_user', 'secret_sauce')
 
-        const itemName = await $('.inventory_item_name').getText()
+        const itemName = await inventoryPage.getFirsInventoryItemName()
         await inventoryPage.addItemToCart(itemName)
         await inventoryPage.expectBadgeCount(1)
 
@@ -27,7 +27,6 @@ describe('Valid Checkout', () => {
         await expect(checkoutComplete.completeMsg).toHaveText('Thank you for your order!')
         await checkoutComplete.backToInventory()
 
-        const cartBadges = await $$('.shopping_cart_badge')
-        expect(cartBadges.length).toBe(0)
+        await inventoryPage.expectBadgeCount(0)
     })
 })

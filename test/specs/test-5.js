@@ -8,7 +8,7 @@ describe('Saving the card after logout', () => {
         await loginPage.open()
         await loginPage.login('standard_user', 'secret_sauce')
 
-        const itemName = await $('.inventory_item_name').getText()
+        const itemName = await inventoryPage.getFirsInventoryItemName()
         await inventoryPage.addItemToCart(itemName)
         await inventoryPage.expectBadgeCount(1)
 
