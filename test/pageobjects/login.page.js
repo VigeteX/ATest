@@ -1,41 +1,43 @@
-import { $ } from '@wdio/globals'
-import Page from './page.js';
 
-/**
- * sub page containing specific selectors and methods for a specific page
- */
-class LoginPage extends Page {
-    /**
-     * define selectors using getter methods
-     */
-    get inputUsername () {
-        return $('#username');
+class LoginPage {
+    get usernameInput() { return $('#user-name') }
+    get passwordInput() { return $('#password') }
+    get loginButton() { return $('#login-button') }
+    get errorMessage() { return $('h3[data-test="error"]') }
+    get usernameErrorIcon() { return $('input[data-test="username"] + svg.error_icon') }
+    get passwordErrorIcon() { return $('input[data-test="password"] + svg.error_icon') }
+
+    async open() {
+        await browser.url('https://www.saucedemo.com/')
     }
 
-    get inputPassword () {
-        return $('#password');
+    async login(username, password) {
+        await this.usernameInput.setValue(username)
+        await this.passwordInput.setValue(password)
+        await this.loginButton.click()
     }
 
-    get btnSubmit () {
-        return $('button[type="submit"]');
+    async assertInvalidError() {
+        await expect(this.errorMessage).toBeDisplayed()
+        await expect(this.errorMessage).toHaveText(
+            'Epic sadface: Username and password do not match any user in this service'
+        )
+        await expect(this.usernameErrorIcon).toBeDisplayed()
+        await expect(this.passwordErrorIcon).toBeDisplayed()
+        let classAttr = await this.usernameInput.getAttribute('class')
+        expect(classAttr).toBe('input_error form_input error')
+        classAttr = await this.passwordInput.getAttribute('class')
+        expect(classAttr).toBe('input_error form_input error')
     }
 
-    /**
-     * a method to encapsule automation code to interact with the page
-     * e.g. to login using username and password
-     */
-    async login (username, password) {
-        await this.inputUsername.setValue(username);
-        await this.inputPassword.setValue(password);
-        await this.btnSubmit.click();
+    async expectFieldsEmpty() {
+        await expect(this.usernameInput).toHaveValue('')
+        await expect(this.passwordInput).toHaveValue('')
     }
 
-    /**
-     * overwrite specific options to adapt it to page object
-     */
-    open () {
-        return super.open('login');
+    async checkLink(link) {
+        const currentUrl = await browser.getUrl()
+        await expect(currentUrl).toContain(link)
     }
 }
-
-export default new LoginPage();
+export default new LoginPage()
